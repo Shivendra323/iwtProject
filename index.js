@@ -2,6 +2,7 @@
 var os          = require('os');
 var express     = require('express');
 var https       = require('https');
+var http       = require('http');
 var app         = express();
 var fs          = require('fs');
 var socketIO    = require('socket.io');
