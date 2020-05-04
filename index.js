@@ -11,7 +11,7 @@ var options = {
    cert: fs.readFileSync('ssl/cert.pem')
 };
 
-var servers = https.createServer(options, app).listen(443, function(req, res){
+var servers = https.createServer(options, app).listen(8080, function(req, res){
        console.log('HTTPS listening on 443');
 });
 
