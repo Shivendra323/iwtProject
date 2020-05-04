@@ -15,7 +15,7 @@ var socketIO    = require('socket.io');
        console.log('HTTPS listening on 443');
 });*/
 
-var servers = http.createServer(app).listen(8443, function(req, res){
+var servers = http.createServer(app).listen(8080, function(req, res){
        console.log('HTTPS listening on 8443');
 });
 
