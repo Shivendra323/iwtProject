@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>Hii_Bol</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="main.css">
+	</head>
+	<body>
+	<h1>hi shiv</h1>
+	  <label>Enter Message:</label><br/><br/>
+	  <input id="roomId"></input>
+      <button id="createRoom">Create Room</button>
+      <button id="joinRoom">Join Room</button>
+      <button id="yoyo">Start</button>
+      <button id="stop">Stop</button><br/><br/>
+      <video id="remoteVideo" class="col-xl-8 col-sm-8" autoplay muted playsinline></video>
+      <video id="localVideo" class="col-xl-2 col-sm-2" autoplay muted playsinline></video>
+      <textarea id="yourMessage"></textarea>
+      <button id="messageSend">send</button>
+      <pre id="ssmessages"></pre>
+    
+    <script src="/socket.io/socket.io.js"></script>  
+	<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+	<script src="main.js"></script>
+	</body>
+</html>
