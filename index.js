@@ -6,13 +6,17 @@ var app         = express();
 var fs          = require('fs');
 var socketIO    = require('socket.io');
 
-var options = {
+/*var options = {
    key: fs.readFileSync('ssl/key.pem'),
    cert: fs.readFileSync('ssl/cert.pem')
-};
+};*/
 
-var servers = https.createServer(options, app).listen(8080, function(req, res){
+/*var servers = https.createServer(options, app).listen(443, function(req, res){
        console.log('HTTPS listening on 443');
+});*/
+
+var servers = http.createServer(app).listen(8443, function(req, res){
+       console.log('HTTPS listening on 8443');
 });
 
 app.use(express.static("page"));
