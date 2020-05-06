@@ -14,6 +14,16 @@ var turnReady;
 var pcConfig = {
   'iceServers': [{
      'urls': 'stun:bn-turn1.xirsys.com'
+   },
+   {
+     'urls': 'turn:bn-turn1.xirsys.com:80?transport=udp',
+     'credential':'a1693180-8f9a-11ea-8742-9646de0e6ccd',
+     'username' : '2upAxkES280ExSJQCE2gkzJUkR_9fXUk88poCqtRDDH72A6h_VHAQECPQX1eIhQnAAAAAF6ytrhTaGl2ZW5kcmEzMjM='
+     },
+   {
+     'urls': 'turns:bn-turn1.xirsys.com:443?transport=tcp',
+     'credential':'a1693180-8f9a-11ea-8742-9646de0e6ccd',
+     'username' : '2upAxkES280ExSJQCE2gkzJUkR_9fXUk88poCqtRDDH72A6h_VHAQECPQX1eIhQnAAAAAF6ytrhTaGl2ZW5kcmEzMjM='
    }]
 };
 
