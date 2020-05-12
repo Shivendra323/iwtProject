@@ -1,6 +1,6 @@
 'use strict';
-var createBtn = document.getElementById('createRoom');
-var joinBtn = document.getElementById('joinRoom');
+//var createBtn = document.getElementById('createRoom');
+//var joinBtn = document.getElementById('joinRoom');
 var startBtn = document.getElementById('yoyo');
 var stopBtn = document.getElementById('stop');
 var isChannelReady = false;
@@ -10,16 +10,31 @@ var localStream;
 var pc;
 var remoteStream;
 var turnReady;
+var socket = io.connect();
+
+const { username, roomId, createORjoin} = Qs.parse(window.location.search, {
+  ignoreQueryPrefix: true
+});
+
+console.log(username, roomId, createORjoin);
+
+if(createORjoin === "Create Room"){
+   createRoom();
+}
+
+if(createORjoin === "Join Room"){
+   joinRoom();
+}
 
 var pcConfig = {
   'iceServers': [{
      'urls': 'stun:bn-turn1.xirsys.com'
    },
-   {
+  /* {
      'urls': 'turn:bn-turn1.xirsys.com:80?transport=udp',
      'credential':'a1693180-8f9a-11ea-8742-9646de0e6ccd',
      'username' : '2upAxkES280ExSJQCE2gkzJUkR_9fXUk88poCqtRDDH72A6h_VHAQECPQX1eIhQnAAAAAF6ytrhTaGl2ZW5kcmEzMjM='
-     },
+     },*/
    {
      'urls': 'turns:bn-turn1.xirsys.com:443?transport=tcp',
      'credential':'a1693180-8f9a-11ea-8742-9646de0e6ccd',
@@ -27,44 +42,48 @@ var pcConfig = {
    }]
 };
 
+
+
 var sdpConstraints = {
-  offerToReceiveAudio: true,
+  offerToReceiveAudio:{
+    echoCancellation: true,
+    noiseSuppression: true
+  },
   offerToReceiveVideo: true
 };
 
-var socket = io.connect();
 
-createBtn.addEventListener('click', createRoom);
-joinBtn.addEventListener('click', joinRoom);
+
+//createBtn.addEventListener('click', createRoom);
+//joinBtn.addEventListener('click', joinRoom);
 startBtn.addEventListener('click', yoyo);
-stopBtn.addEventListener('click', stop);
+//stopBtn.addEventListener('click', stop);
 
 
 function createRoom(){
-   var roomId = document.getElementById('roomId').value
+
    var room = roomId;
    
    
    if (room !== '') {
    	socket.emit('create or join', room);
    	console.log('Attempted to create room', room);
-   	createBtn.disabled = true;
-   	joinBtn.disabled = true;
+   	//createBtn.disabled = true;
+   	//joinBtn.disabled = true;
    	
    }
    
 }
 
 function joinRoom(){
-   var roomId = document.getElementById('roomId').value
    var room = roomId;
    
    
    if (room !== '') {
    	socket.emit('join a room', room);
    	console.log('Attempted to join room', room);
-   	createBtn.disabled = true;
-   	joinBtn.disabled = true;
+   	//createBtn.disabled = true;
+   	//joinBtn.disabled = true;
    	
    }
    
@@ -78,14 +97,17 @@ socket.on('created', function(room) {
 
 socket.on('full', function(room) {
   console.log('Room ' + room + ' is full');
+  window.location = "index.html";
 });
 
 socket.on('alreadyRoom', function(room) {
   console.log('Already exist Room ' + room );
+  window.location = "index.html";
 });
 
 socket.on('noRoom', function(room) {
   console.log('not exist Room ' + room );
+  window.location = "index.html";
 });
 
 socket.on('join', function (room){
@@ -144,7 +166,11 @@ var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
 
 function yoyo(){navigator.mediaDevices.getUserMedia({
-  audio: true,
+  audio: {
+    echoCancellation: true,
+    noiseSuppression: true
+    
+  },
   video: true
 }).then(gotStream)
 .catch(function(e) {
@@ -173,15 +199,15 @@ var constraints = {
 
 console.log('Getting user media with constraints', constraints);
 
-if (location.hostname !== 'localhost') {
+/*if (location.hostname !== 'localhost') {
   requestTurn(
     'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
   );
-}
+}*/
 
 function maybeStart() {
   console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
-  if (!isStarted && isChannelReady || typeof localStream !== 'undefined') {
+  if (!isStarted && isChannelReady && typeof localStream !== 'undefined') {
     console.log('>>>>>> creating peer connection');
     createPeerConnection();
     try{
@@ -258,7 +284,7 @@ function onCreateSessionDescriptionError(error) {
   trace('Failed to create session description: ' + error.toString());
 }
 
-function requestTurn(turnURL) {
+/*function requestTurn(turnURL) {
   var turnExists = false;
   for (var i in pcConfig.iceServers) {
     if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
@@ -276,10 +302,8 @@ function requestTurn(turnURL) {
         var turnServer = JSON.parse(xhr.responseText);
         console.log('Got TURN server: ', turnServer);
         pcConfig.iceServers.push({
-          'urls': ['turn:bn-turn1.xirsys.com:80?transport=udp'], 
-          'username': 'uAiljmIwDslkNFlLyPgu2xYR2KM1Du8bHHdyhiq24uNNFxMQxQ3IM8UpI2D-XL9PAAAAAF6v80BTaGl2ZW5kcmEzMjM=',
-          'credential': 'f21c2c38-8df4-11ea-882e-9646de0e6ccd',
-          'credentialType': 'password'
+          'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
+          'credential': turnServer.password
         });
         turnReady = true;
       }
@@ -287,7 +311,7 @@ function requestTurn(turnURL) {
     xhr.open('GET', turnURL, true);
     xhr.send();
   }
-}
+}*/
 
 function handleRemoteStreamAdded(event) {
   console.log('Remote stream added.');
@@ -316,6 +340,3 @@ function stop() {
   pc.close();
   pc = null;
 }
-/*
-.*/
-
