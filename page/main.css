@@ -1,5 +1,13 @@
-#localVideo{
+
+#chatbox{
   position: relative;
-       top:500px;
-      right:150px;
+      top: 100px;
+}
+#panelbox{
+    Margin-left: 30px;
+    
+}
+#panel{
+  position: relative;
+      top: 100px;
 }
