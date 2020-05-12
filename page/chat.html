@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title>Hii_Bol</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="main.css">
+	</head>
+	<body style="Background-color:Red;">
+	<nav class="navbar navbar-inverse navbar-fixed-top"><center><h1>Hii_Bol<h1><center></nav>
+	<div id="chatbox" class="row">
+		<div id="panelbox" class="panel panel-primary col-xs-10  col-sm-6   col-md-2 " style="background-color:#292825">
+			<div class="panel-heading"  style="background-color:#292825"></div>
+			<div class="panel-body">
+			          <div class="frame">
+            <ul></ul>
+            <div>
+                <div class="msj-rta macro" style="margin:auto">                        
+                    <div class="text text-r" style="background:whitesmoke !important">
+                        <input class="mytext" placeholder="Type a message"/>
+                    </div> 
+                </div>
+            </div>
+        </div> 
+			</div>
+		</div>
+		<div id="panelbox" class="panel panel-primary col-xs-10  col-sm-10  col-md-9 ">
+		<div class="panel-body" style=" background-color:white;">
+		<video id="remoteVideo" class="col-xs-12 col-sm-6 col-md-6" autoplay playsinline></video>
+		<video id="localVideo" class="col-xs-12 col-sm-6 col-md-6" autoplay muted playsinline></video></div>
+		<button id="yoyo">start</button>
+		</div>
+	</div>
+         
+    <script src="/socket.io/socket.io.js"></script>  
+	<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.min.js"></script>
+	<script src="main.js"></script>
+	
+	</body>
+</html>
