@@ -1,25 +1,28 @@
 <html>
 	<head>
-		<title>Hii_Bol</title>
+		<title>Hii_bol</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<link rel="stylesheet" href="main.css">
 	</head>
-	<body>
-	<h1>hi shiv</h1>
-	  <label>Enter Message:</label><br/><br/>
-	  <input id="roomId"></input>
-      <button id="createRoom">Create Room</button>
-      <button id="joinRoom">Join Room</button>
-      <button id="yoyo">Start</button>
-      <button id="stop">Stop</button><br/><br/>
-      <video id="remoteVideo" class="col-xl-8 col-sm-8" autoplay playsinline></video>
-      <video id="localVideo" class="col-xl-2 col-sm-2" autoplay muted playsinline></video>
-      <textarea id="yourMessage"></textarea>
-      <button id="messageSend">send</button>
-      <pre id="ssmessages"></pre>
-    
-    <script src="/socket.io/socket.io.js"></script>  
-	<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-	<script src="main.js"></script>
+	
+	<body style="background-color: black;">
+	<div id="panel" class="row">
+		<div class="panel panel-primary col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-offset-4 col-md-4 ">
+			<div class="panel-heading"><center><h3>Welcome to Hii_bol</h3></center></div>
+			<div class="panel-body">
+			<center>
+			  <form action="chat.html">
+					<input id="username" type="text" name="username" placeholder="Username"></input><br/><br/>
+					<input id="roomId" name="roomId" type="text" placeholder="Room ID"></input><br/><br/>
+					<select name="createORjoin" id="createORjoin">
+			                <option value="Create Room">Create Room</option>
+							<option value="Join Room">Join Room</option>
+					</select>
+					<input id="createRoom" type="submit" value="Submit" class="btn btn-primary"></input>
+			</center>
+			</div>
+			<div class="panel-footer"></div>
+		</div>
+	</div>
 	</body>
 </html>
