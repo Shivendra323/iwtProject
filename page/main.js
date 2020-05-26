@@ -1,5 +1,10 @@
 'use strict';
-//var createBtn = document.getElementById('createRoom');
+
+const chatMessages = document.querySelector('.chat-messages');
+const msg = document.querySelector('#msg');
+const roomName = document.getElementById('room-name');
+const userList = document.getElementById('users');
+var sendBtn = document.getElementById('send');
 //var joinBtn = document.getElementById('joinRoom');
 var startBtn = document.getElementById('yoyo');
 var stopBtn = document.getElementById('stop');
@@ -8,6 +13,7 @@ var isInitiator = false;
 var isStarted = false;
 var localStream;
 var pc;
+var receiveChannel = null;
 var remoteStream;
 var turnReady;
 var socket = io.connect();
@@ -17,6 +23,7 @@ const { username, roomId, createORjoin} = Qs.parse(window.location.search, {
 });
 
 console.log(username, roomId, createORjoin);
+
 
 if(createORjoin === "Create Room"){
    createRoom();
@@ -47,14 +54,14 @@ var pcConfig = {
 var sdpConstraints = {
   offerToReceiveAudio:{
     echoCancellation: true,
-    noiseSuppression: true
+    noiseSuppression: true,
+    channelCount: 2
   },
   offerToReceiveVideo: true
 };
 
 
-
-//createBtn.addEventListener('click', createRoom);
+sendBtn.addEventListener('click', send);
 //joinBtn.addEventListener('click', joinRoom);
 startBtn.addEventListener('click', yoyo);
 //stopBtn.addEventListener('click', stop);
@@ -78,7 +85,6 @@ function createRoom(){
 function joinRoom(){
    var room = roomId;
    
-   
    if (room !== '') {
    	socket.emit('join a room', room);
    	console.log('Attempted to join room', room);
@@ -93,6 +99,8 @@ socket.on('created', function(room) {
   console.log('Created room ' + room);
   isInitiator = true;
   maybeStart();
+  outputMessage('Welcome to Hii_bol '+ username);
+  
 });
 
 socket.on('full', function(room) {
@@ -115,13 +123,18 @@ socket.on('join', function (room){
   console.log('This peer is the initiator of room ' + room + '!');
   isChannelReady = true;
   maybeStart();
+  outputMessage('New member.... ');
+  
 });
 
 socket.on('joined', function(room) {
   console.log('joined: ' + room);
   isChannelReady = true;
   maybeStart();
+ outputMessage('Welcome to Hii_bol '+ username);
+  
 });
+
 
 socket.on('log', function(array) {
   console.log.apply(console, array);
@@ -168,7 +181,9 @@ var remoteVideo = document.querySelector('#remoteVideo');
 function yoyo(){navigator.mediaDevices.getUserMedia({
   audio: {
     echoCancellation: true,
-    noiseSuppression: true
+    noiseSuppression: true,
+    channelCount: 2,
+    autoGainControl: true
     
   },
   video: true
@@ -178,15 +193,13 @@ function yoyo(){navigator.mediaDevices.getUserMedia({
 });
 }
 function gotStream(stream) {
+  isStarted = true;
   console.log('Adding local stream.');
   localStream = stream;
   localVideo.srcObject = stream;
   sendMessage('got user media');
-  try{
-  handleRemoteStreamAdded(event);}
-  catch{
-    console.log('no remote');
-  }
+  
+  
   if (isInitiator) {
     maybeStart();
   }
@@ -207,15 +220,16 @@ console.log('Getting user media with constraints', constraints);
 
 function maybeStart() {
   console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
-  if (!isStarted && isChannelReady && typeof localStream !== 'undefined') {
+  if ( isChannelReady ) {
     console.log('>>>>>> creating peer connection');
     createPeerConnection();
     try{
     pc.addStream(localStream);
+    console.log('svdjgadjfuyfwdwghavgguydtsguydhgasvdty');
     }catch{
       console.log('No video Stream');
     }
-    isStarted = true;
+    //isStarted = true;
     console.log('isInitiator', isInitiator);
     if (isInitiator) {
       doCall();
@@ -319,6 +333,13 @@ function handleRemoteStreamAdded(event) {
   remoteVideo.srcObject = remoteStream;
 }
 
+/*function handleDataChannelAdded(event) {
+  console.log('Remote data added.');
+  remoteData = event.data;
+  outputMessage(remoteData);
+  
+}*/
+
 function handleRemoteStreamRemoved(event) {
   console.log('Remote stream removed. Event: ', event);
 }
@@ -340,3 +361,15 @@ function stop() {
   pc.close();
   pc = null;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Output message to DOM
+function outputMessage(msg) {
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.innerHTML =  msg;
+  document.querySelector('.chat-messages').appendChild(div);
+}
+
