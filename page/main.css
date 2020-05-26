@@ -11,3 +11,23 @@
   position: relative;
       top: 100px;
 }
+body{
+  Background-color:#8494b5;
+}
+
+
+.chat-main{
+   height: 200px;
+  background-color: white;
+  overflow-y: scroll;
+}
+
+
+@media (max-width: 700px) {
+	.chat-main {
+		display: block;
+	}
+
+}
+
+
